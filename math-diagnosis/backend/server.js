@@ -4,6 +4,8 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const errorRoutes = require('./routes/errors');
+const diagnoseRoutes = require('./routes/diagnose');
+const seedRules = require('./seed');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -64,6 +66,18 @@ function fallbackRoutes(router) {
     res.json({ message: '已删除' });
   });
 
+  router.post('/api/diagnose', (req, res) => {
+    const { scoreRange } = req.body;
+    if (!scoreRange) {
+      return res.status(400).json({ message: '请提供分数段' });
+    }
+    const rule = seedRules.find((r) => r.scoreRange === scoreRange);
+    if (!rule) {
+      return res.status(404).json({ message: `未找到分数段 "${scoreRange}" 对应的诊断数据` });
+    }
+    res.json({ _id: scoreRange, ...rule });
+  });
+
   return router;
 }
 
@@ -73,6 +87,14 @@ async function start() {
     dbConnected = true;
     console.log('✅ MongoDB 已连接');
     app.use('/api/errors', errorRoutes);
+    app.use('/api/diagnose', diagnoseRoutes);
+
+    const ScoreRule = require('./models/ScoreRule');
+    const count = await ScoreRule.countDocuments();
+    if (count === 0) {
+      await ScoreRule.insertMany(seedRules);
+      console.log('✅ 已导入分数段诊断种子数据');
+    }
   } catch (err) {
     console.log('⚠️  MongoDB 未连接，使用内存存储模式:', err.message);
     fallbackRoutes(app);

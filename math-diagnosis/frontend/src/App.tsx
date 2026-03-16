@@ -3,12 +3,14 @@ import Home from './pages/Home';
 import ErrorList from './pages/ErrorList';
 import AddError from './pages/AddError';
 import Diagnosis from './pages/Diagnosis';
+import ScoreDiagnose from './pages/ScoreDiagnose';
 
 const navItems = [
   { to: '/', label: '首页' },
   { to: '/errors', label: '错题本' },
   { to: '/add', label: '添加错题' },
   { to: '/diagnosis', label: '诊断分析' },
+  { to: '/score', label: '分数诊断' },
 ];
 
 export default function App() {
@@ -46,6 +48,7 @@ export default function App() {
           <Route path="/errors" element={<ErrorList />} />
           <Route path="/add" element={<AddError />} />
           <Route path="/diagnosis" element={<Diagnosis />} />
+          <Route path="/score" element={<ScoreDiagnose />} />
         </Routes>
       </main>
 

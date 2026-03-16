@@ -31,3 +31,13 @@ export const addError = (data: Omit<MathError, '_id' | 'mastered' | 'createdAt'>
 export const updateError = (id: string, data: Partial<MathError>) =>
   api.patch<MathError>(`/errors/${id}`, data).then((r) => r.data);
 export const deleteError = (id: string) => api.delete(`/errors/${id}`);
+
+export interface ScoreRule {
+  _id: string;
+  scoreRange: string;
+  knowledgePoints: string[];
+  coreTopics: string[];
+}
+
+export const diagnoseByScore = (scoreRange: string) =>
+  api.post<ScoreRule>('/diagnose', { scoreRange }).then((r) => r.data);
