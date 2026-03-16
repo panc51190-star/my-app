@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer components {
+  .input-field {
+    @apply w-full rounded-xl border border-gray-200 bg-apple-gray px-4 py-3 text-sm text-apple-text placeholder-apple-secondary outline-none transition-all focus:border-apple-blue focus:ring-2 focus:ring-apple-blue/20;
+  }
+}
